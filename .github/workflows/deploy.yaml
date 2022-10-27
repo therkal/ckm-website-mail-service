@@ -76,6 +76,14 @@ jobs:
           name: target-folder
           path: ./target
 
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@7e0881f8fe90b25e305bbf0309761e9314607e25
+        with:
+          cosign-release: "v1.9.0"
+
       # Workaround: https://github.com/docker/build-push-action/issues/461
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
@@ -112,6 +120,19 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      # Sign the resulting Docker image digest except on PRs.
+      # This will only write to the public Rekor transparency log when the Docker
+      # repository is public to avoid leaking data.  If you would like to publish
+      # transparency data even for private images, pass --force to cosign below.
+      # https://github.com/sigstore/cosign
+      - name: Sign the published Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        # This step uses the identity token to provision an ephemeral certificate
+        # against the sigstore community Fulcio instance.
+        run: cosign sign ${{ steps.meta.outputs.tags }}@${{ steps.build-and-push.outputs.digest }}
+
   deploy:
     environment: k3s-oracle-cloud
     needs: [build, build-and-tag-docker]
@@ -130,4 +151,4 @@ jobs:
           HELM_FILE_BASE_PATH: ./helm/${{ env.IMAGE_NAME }}
         with:
           args: |
-            helm upgrade --install ${{ env.IMAGE_NAME }} ${{ ENV.HELM_FILE_BASE_PATH }} -f ${{ENV.HELM_FILE_BASE_PATH}}/values.yaml --set image.tag=${{ env.APP_VERSION }} --set quarkus.mailer.username=${{ ENV.MAILJET_USERNAME }} --set quarkus.mailer.password=${{ ENV.MAILJET_PASSWORD }} --set ckm.mail.toAddress=${{ ENV.CKM_MAIL_TO_ADDRESS }} --namespace production
+            helm upgrade --install ${{ env.IMAGE_NAME }} ${{ ENV.HELM_FILE_BASE_PATH }} -f ${{ENV.HELM_FILE_BASE_PATH}}/values.yaml --set image.tag=${{ env.APP_VERSION }} --set quarkus.mailer.username=${{ ENV.MAILJET_USERNAME }} --set quarkus.mailer.password=${{ ENV.MAILJET_PASSWORD }} --namespace production

@@ -4,6 +4,10 @@
 
 replicaCount: 1
 
+ckm:
+  mail:
+    toAddress: ck.martens22@gmail.com
+
 image:
   repository: ghcr.io/therkal/ckm-website-mail-service
   pullPolicy: IfNotPresent
