@@ -44,13 +44,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                 name: mailjet-credentials
-                key: quarkus.mailer.username
+                key: username
                 optional: false
             - name: quarkus.mailer.password
               valueFrom:
                 secretKeyRef:
                 name: mailjet-credentials
-                key: quarkus.mailer.password
+                key: password
                 optional: false
           livenessProbe:
             httpGet:
