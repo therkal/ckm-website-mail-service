@@ -126,9 +126,8 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           MAILJET_USERNAME: ${{ secrets.MAILJET_USERNAME }}
           MAILJET_PASSWORD: ${{ secrets.MAILJET_PASSWORD }}
-          CKM_MAIL_TO_ADDRESS: ${{ secrets.CKM_MAIL_TO_ADDRESS }}
           CKM_MAIL_FROM_ADDRESS: ${{ secrets.CKM_MAIL_FROM_ADDRESS }}
           HELM_FILE_BASE_PATH: ./helm/${{ env.IMAGE_NAME }}
         with:
           args: |
-            helm upgrade --install ${{ env.IMAGE_NAME }} ${{ ENV.HELM_FILE_BASE_PATH }} -f ${{ENV.HELM_FILE_BASE_PATH}}/values.yaml --set image.tag=${{ env.APP_VERSION }} --set quarkus.mailer.username=${{ ENV.MAILJET_USERNAME }} --set quarkus.mailer.password=${{ ENV.MAILJET_PASSWORD }} --set quarkus.mailer.from=${{ env.CKM_MAIL_FROM_ADDRESS }} --set CKM_MAIL_TO_ADDRESS=${{ ENV.CKM_MAIL_TO_ADDRESS }} --namespace production
+            helm upgrade --install ${{ env.IMAGE_NAME }} ${{ ENV.HELM_FILE_BASE_PATH }} -f ${{ENV.HELM_FILE_BASE_PATH}}/values.yaml --set image.tag=${{ env.APP_VERSION }} --set quarkus.mailer.username=${{ ENV.MAILJET_USERNAME }} --set quarkus.mailer.password=${{ ENV.MAILJET_PASSWORD }} --set quarkus.mailer.from=${{ env.CKM_MAIL_FROM_ADDRESS }} --namespace production

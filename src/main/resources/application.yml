@@ -20,5 +20,5 @@ quarkus:
     login: REQUIRED
     ssl: true
     start-tls: OPTIONAL
-    from: ${CKM_MAIL_FROM_ADDRESS}
+    from: Hidden Hues Photo - No Reply <no-reply@hiddenhuesphoto.com>
     mock: false
