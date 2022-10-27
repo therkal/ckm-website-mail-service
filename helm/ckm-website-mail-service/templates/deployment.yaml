@@ -43,15 +43,15 @@ spec:
             - name: quarkus.mailer.username
               valueFrom:
                 secretKeyRef:
-                name: mailjet-credentials
-                key: username
-                optional: false
+                  name: mailjet-credentials
+                  key: username
+                  optional: false
             - name: quarkus.mailer.password
               valueFrom:
                 secretKeyRef:
-                name: mailjet-credentials
-                key: password
-                optional: false
+                  name: mailjet-credentials
+                  key: password
+                  optional: false
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.uri }}
