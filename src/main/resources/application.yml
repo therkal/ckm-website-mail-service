@@ -1,2 +1,24 @@
-greeting:
-  message: "hello"
+ckm:
+  mail:
+    toAddress: ${CKM_MAIL_TO_ADDRESS}
+quarkus:
+  live-reload:
+    instrumentation: true
+  application:
+    name: ckm-mail-service
+  http:
+    cors: true
+    port: 8083
+  oidc:
+    auth-server-url: https://iam.martens.live/auth/realms/ckm-website
+    client-id: ckm-app-client
+  mailer:
+    host: in-v3.mailjet.com
+    port: 465
+    username: ${MAILJET_USERNAME}
+    password: ${MAILJET_PASSWORD}
+    login: REQUIRED
+    ssl: true
+    start-tls: OPTIONAL
+    from: ${CKM_MAIL_FROM_ADDRESS}
+    mock: false

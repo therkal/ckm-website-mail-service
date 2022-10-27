@@ -1,0 +1,6 @@
+quarkus:
+  http:
+    cors:
+      ~: true
+      origins: https://photo.martens.live, https://www.hiddenhuesphoto.com
+      access-control-max-age: 24H
